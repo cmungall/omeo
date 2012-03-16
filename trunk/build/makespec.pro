@@ -473,7 +473,8 @@ vp(hsapiens_snp). % 132998 / 41427246
 % SYNC
 % ----------------------------------------
 
-sync <-- [],
-  'rsync -avz *.{obo,owl,txt,tbl,mart} yuri.lbl.gov:/var/www/ontologies/ensembl/'.
+deploy <-- [],
+  './deploy.sh'.
+
 
 
