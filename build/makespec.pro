@@ -86,6 +86,7 @@ attr_pair(ensembl_gene_id,interpro).
 attr_pair(ensembl_gene_id,family).
 attr_pair(family, family_description).
 
+% this determines what goes in owl:imports
 subont_tax('label').
 subont_tax('comment').
 subont_tax('taxon').
@@ -176,22 +177,22 @@ species_dependencies(SP,Deps,Files) :-
 '$SP.owl' <-- Deps,
   {sp(SP),
    species_dependencies(SP,Deps,Files),
-   maplist(atom_concat('http://purl.obolibrary.org/obo/ensembl/'),Files,URLs),
+   maplist(atom_concat('http://purl.obolibrary.org/obo/omeo/'),Files,URLs),
    atomic_list_concat(URLs,' ',FA)},
-  'owltools --create-ontology ensembl/$SP.owl --add-imports-declarations $FA http://purl.obolibrary.org/obo/so.owl http://purl.obolibrary.org/obo/ro.owl -o file://`pwd`/$@'.
-%  'owltools --create-ontology ensembl/$SP.owl $FA so.owl --merge-support-ontologies -o file://`pwd`/$@'.
+  'owltools --create-ontology omeo/$SP.owl --add-imports-declarations $FA http://purl.obolibrary.org/obo/so.owl http://purl.obolibrary.org/obo/ro.owl -o file://`pwd`/$@'.
+%  'owltools --create-ontology omeo/$SP.owl $FA so.owl --merge-support-ontologies -o file://`pwd`/$@'.
 
 'combo/$Anc.owl' <-- [],
   {anc_combo(Anc,SpList),
    findall(F,(member(Sp,SpList),atom_concat(Sp,'.owl',F)),Fs),
    atomic_list_concat(Fs,' ',FA)
    },
-  'owltools  --create-ontology ensembl/$Anc.owl $FA --merge-support-ontologies -o file://`pwd`/$@'.
+  'owltools  --create-ontology omeo/$Anc.owl $FA --merge-support-ontologies -o file://`pwd`/$@'.
 
 
 '$SP.obo' <-- Deps,
   {species_dependencies(SP,Deps,Files),atomic_list_concat(Files,' ',FilesAtom)},
-  'owltools --create-ontology ensembl/$SP.owl $FilesAtom --merge-support-ontologies -o -f obo $@'.
+  'owltools --create-ontology omeo/$SP.owl $FilesAtom --merge-support-ontologies -o -f obo $@'.
 
 % map to MOD IDs
 '$SP-MOD.obo' <-- '$SP.obo',
@@ -210,12 +211,12 @@ species_dependencies(SP,Deps,Files) :-
 
 '$Binomial-$F1-$F2.mart' <-- [],
   {F1\=mod_id,tax_db_species(_,DB,Binomial)},
-  'biomart-fetch.pl -d $DB -a $F1 -a $F2 > $@'.
+  'biomart-fetch.pl -d $DB -a $F1 -a $F2 > $@.tmp && mv $@.tmp $@'.
 
 '$Binomial-mod_id-$F1.mart' <-- [],
   {tax_idprop(Tax,F2),
    tax_db_species(Tax,DB,Binomial)},
-    'biomart-fetch.pl -d $DB -a $F2 -a $F1 > $@'.
+    'biomart-fetch.pl -d $DB -a $F2 -a $F1 > $@.tmp && mv $@.tmp $@'.
 
 '$SP-gene2tax.tbl' <-- ['$SP-ensembl_gene_id-external_gene_id.mart'],
   {tax_db_species(Tax,_,SP)},
@@ -232,30 +233,30 @@ species_dependencies(SP,Deps,Files) :-
   'owltools base.obo --parse-tsv -a EquivalentClasses --iri-prefix 1 $MOD --iri-prefix 2 ENSEMBL $< -o file://`pwd`/$@'.
 
 '$SP-entrez.owl' <-- ['$SP-ensembl_gene_id-entrezgene.mart'],
-  'owltools --create-ontology ensembl/$@ --parse-tsv -a EquivalentClasses --iri-prefix 1 ENSEMBL --iri-prefix 2 NCBIGene $< -o file://`pwd`/$@'.
+  'owltools --create-ontology omeo/$@ --parse-tsv -a EquivalentClasses --iri-prefix 1 ENSEMBL --iri-prefix 2 NCBIGene $< -o file://`pwd`/$@'.
 
 '$SP-label.owl' <-- ['$SP-ensembl_gene_id-external_gene_id.mart'],
-  'owltools --create-ontology ensembl/$@ --parse-tsv -l --iri-prefix 1 ENSEMBL $< -o file://`pwd`/$@'.
+  'owltools --create-ontology omeo/$@ --parse-tsv -l --iri-prefix 1 ENSEMBL $< -o file://`pwd`/$@'.
 
 '$SP-comment.owl' <-- ['$SP-ensembl_gene_id-description.mart'],
-  'owltools --create-ontology ensembl/$@ --parse-tsv --comment --iri-prefix 1 ENSEMBL $< -o file://`pwd`/$@'.
+  'owltools --create-ontology omeo/$@ --parse-tsv --comment --iri-prefix 1 ENSEMBL $< -o file://`pwd`/$@'.
 
 '$SP-taxon.owl' <-- ['$SP-gene2tax.tbl', 'ro-subset.owl'],
-  'owltools --create-ontology ensembl/$@ ro-subset.owl --merge-support-ontologies --parse-tsv -p RO:0002162 -a SubClassOf --iri-prefix 1 ENSEMBL $< -o file://`pwd`/$@'.
+  'owltools --create-ontology omeo/$@ ro-subset.owl --merge-support-ontologies --parse-tsv -p RO:0002162 -a SubClassOf --iri-prefix 1 ENSEMBL $< -o file://`pwd`/$@'.
 
 % todo - infer this?
 '$SP-panther.owl' <-- ['$SP-pthr.tbl'],
-  'owltools --create-ontology ensembl/$@ --parse-tsv -a SubClassOf --iri-prefix 2 PANTHER $< -o file://`pwd`/$@'.
+  'owltools --create-ontology omeo/$@ --parse-tsv -a SubClassOf --iri-prefix 2 PANTHER $< -o file://`pwd`/$@'.
 
 '$SP-ensfm.owl' <-- ['$SP-ensembl_gene_id-family.mart'],
-  'owltools --create-ontology ensembl/$@ --parse-tsv -a SubClassOf --iri-prefix 1 ENSEMBL --iri-prefix 2 ENSEMBL $< -o file://`pwd`/$@'.
+  'owltools --create-ontology omeo/$@ --parse-tsv -a SubClassOf --iri-prefix 1 ENSEMBL --iri-prefix 2 ENSEMBL $< -o file://`pwd`/$@'.
 
 '$SP-family-description.owl' <-- ['$SP-family-family_description.mart'],
-  'owltools --create-ontology ensembl/$@ --parse-tsv -l --iri-prefix 1 ENSEMBL $< -o file://`pwd`/$@'.
+  'owltools --create-ontology omeo/$@ --parse-tsv -l --iri-prefix 1 ENSEMBL $< -o file://`pwd`/$@'.
 
 
 '$SP-uniprot.owl' <-- ['$SP-ensembl_gene_id-uniprot_swissprot_accession.mart', 'ro-subset.owl'],
-  'owltools --create-ontology ensembl/$@ ro-subset.owl --merge-support-ontologies --parse-tsv -p RO:0002205 -a SubClassOf --iri-prefix 1 ENSEMBL --iri-prefix 2 UniProtKB $< -o file://`pwd`/$@'.
+  'owltools --create-ontology omeo/$@ ro-subset.owl --merge-support-ontologies --parse-tsv -p RO:0002205 -a SubClassOf --iri-prefix 1 ENSEMBL --iri-prefix 2 UniProtKB $< -o file://`pwd`/$@'.
 
 %'$SP-uniprot-pro.owl' <-- ['$SP-uniprot.owl', 'uniprot2pro.owl'],
 %  'owltools $< uniprot2pro.owl --mcat -o file://`pwd`/$@'.
@@ -266,11 +267,11 @@ species_dependencies(SP,Deps,Files) :-
 
 '$SP-gene-chrom.owl' <-- ['$SP-ensembl_gene_id-chromosome_name.mart'],
   {tax_db_species(Tax,_,SP)},
-  'owltools --create-ontology ensembl/$@ --parse-tsv -p BFO:0000050 -a SubClassOf --iri-prefix 1 ENSEMBL --iri-prefix 2 CHROMOSOME-$Tax  $< -o file://`pwd`/$@'.
+  'owltools --create-ontology omeo/$@ --parse-tsv -p BFO:0000050 -a SubClassOf --iri-prefix 1 ENSEMBL --iri-prefix 2 CHROMOSOME-$Tax  $< -o file://`pwd`/$@'.
 
 '$SP-chrom.owl' <-- ['$SP-chrom.tbl'],
   {tax_db_species(Tax,_,SP)},
-  'owltools --create-ontology ensembl/$@ --parse-tsv -a SubClassOf --iri-prefix 1 CHROMOSOME-$Tax --default2 SO:0000340  $< -o file://`pwd`/$@'.
+  'owltools --create-ontology omeo/$@ --parse-tsv -a SubClassOf --iri-prefix 1 CHROMOSOME-$Tax --default2 SO:0000340  $< -o file://`pwd`/$@'.
 
 '$SP-chrom-label.txt' <-- ['$SP-chrom.tbl'],
   {tax_db_species(Tax,_,SP)},
@@ -279,10 +280,10 @@ species_dependencies(SP,Deps,Files) :-
 % TODO
 '$SP-chrom-label.owl' <-- ['$SP-chrom-label.txt'],
   {tax_db_species(Tax,_,SP)},
-  'owltools --create-ontology ensembl/$@ --parse-tsv -l --iri-prefix 1 CHROMOSOME-$Tax  $< -o file://`pwd`/$@'.
+  'owltools --create-ontology omeo/$@ --parse-tsv -l --iri-prefix 1 CHROMOSOME-$Tax  $< -o file://`pwd`/$@'.
 
 '$SP-type.owl' <-- ['$SP-biotype.tbl'],
-  'owltools --create-ontology ensembl/$@ --parse-tsv -a SubClassOf --iri-prefix 1 ENSEMBL $< -o file://`pwd`/$@'.
+  'owltools --create-ontology omeo/$@ --parse-tsv -a SubClassOf --iri-prefix 1 ENSEMBL $< -o file://`pwd`/$@'.
 
 '$SP-ensembl.obo' <-- ['$SP.obo'],
   'obo-rewrite-to-equivalent-class.pl -t ENSEMBL $< | obo-order-tags.pl  - > $@'.
@@ -294,7 +295,7 @@ species_dependencies(SP,Deps,Files) :-
 /*
 % TOO SLOW!!
   '$SP-ensembl.owl' <-- ['$SP.owl'],
-  'owltools $< --merge-equivalent-classes -t http://purl.obolibrary.org/obo/ENSEMBL_ -o file://`pwd`/$@'.
+  'owltools $< --merge-equivalent-classes -t http://purl.obolibrary.org/obo/ensembl_ -o file://`pwd`/$@'.
 
 '$SP-ensembl.obo' <-- ['$SP-ensembl.owl'],
   'obolib-owl2obo -o $@ $<'.
@@ -355,7 +356,7 @@ species_dependencies(SP,Deps,Files) :-
   'wget ftp://ftp.pir.georgetown.edu/databases/ontology/pro_obo/PRO_mappings/uniprotmapping.txt -O $@'.
 
 'uniprot2pro.owl' <-- ['pro_uniprotmapping.txt'],
-  'owltools --create-ontology ensembl/$@ --parse-tsv -s -a SubClassOf  $< -o file://`pwd`/$@'.
+  'owltools --create-ontology omeo/$@ --parse-tsv -s -a SubClassOf  $< -o file://`pwd`/$@'.
 
 '$SP-g-p.pro' <-- ['$SP-ensembl_gene_id-uniprot_swissprot_accession.mart'],
   'tbl2p -p x -prefix 2=UniProtKB: $< > $@'.
@@ -364,7 +365,7 @@ species_dependencies(SP,Deps,Files) :-
   'blip-findall -index "user:x(-,1)" -i $< -i pro_uniprotmapping.txt "pro_uniprotmapping(P,U),x(G,U)" -select "pro_uniprotmapping(P,U)" -no_pred > $@.tmp && sort -u $@.tmp > $@'.
 
 'pro_uniprotmapping-$SP.owl' <-- 'pro_uniprotmapping-$SP.txt',
-  'owltools --create-ontology ensembl/$@ --parse-tsv -s -a SubClassOf $< -o file://`pwd`/$@'.
+  'owltools --create-ontology omeo/$@ --parse-tsv -s -a SubClassOf $< -o file://`pwd`/$@'.
 
 '%-ids.pro' <-- '%.txt',
   'cut -f1 $< | tbl2p -p id > $@'.
@@ -414,13 +415,13 @@ sp_gaf(SP,DB) :-
 % VARIATION
 % ----------------------------------------
 'Homo_sapiens-varpheno.txt' <-- [],
-   'biomart-fetch.pl -c -d hsapiens_snp  -p varpheno  > $@'.
+   'biomart-fetch.pl -c -d hsapiens_snp  -p varpheno  > $@.tmp && mv $@.tmp $@'.
 
 'Homo_sapiens-gene-snp.txt' <-- 'Homo_sapiens-varpheno.txt',
    'cut -f1,2 $< | grep ^ENS | perl -npe "s/ENSG/ENSEMBL:ENSG/;s/\\trs/\\tdbSNP:rs/" > $@'.
 
 'Homo_sapiens-gene-snp.owl' <-- 'Homo_sapiens-gene-snp.txt',
-  'owltools --create-ontology ensembl/$@ --parse-tsv -p BFO:0000050 -a ClassAssertion -t http://purl.obolibrary.org/obo/SO_0001059  $< -o file://`pwd`/$@'.
+  'owltools --create-ontology omeo/$@ --parse-tsv -p BFO:0000050 -a ClassAssertion -t http://purl.obolibrary.org/obo/SO_0001059  $< -o file://`pwd`/$@'.
 
 % ----------------------------------------
 % BIOGRID
@@ -475,6 +476,6 @@ vp(hsapiens_snp). % 132998 / 41427246
 
 deploy <-- [],
   './deploy.sh'.
-
+%% 'rsync -avz *.{obo,owl,txt,tbl,mart} .lbl.gov:/var/www/ontologies/omeo/'.
 
 
