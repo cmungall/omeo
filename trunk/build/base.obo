@@ -1,2 +1,5 @@
-ontology: omeo
+ontology: ensembl
 
+[Typedef]
+id: x
+name: x
