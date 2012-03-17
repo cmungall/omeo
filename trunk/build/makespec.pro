@@ -93,7 +93,7 @@ subont_tax('taxon').
 subont_tax('equiv-mod').
 subont_tax('gene-chrom').
 subont_tax('chrom').
-subont_tax('chrom-label').
+subont_tax('chrom2label').
 subont_tax('panther').
 subont_tax('entrez').
 %subont_tax('panther-ids').
@@ -273,12 +273,12 @@ species_dependencies(SP,Deps,Files) :-
   {tax_db_species(Tax,_,SP)},
   'owltools --create-ontology omeo/$@ --parse-tsv -a SubClassOf --iri-prefix 1 CHROMOSOME-$Tax --default2 SO:0000340  $< -o file://`pwd`/$@'.
 
-'$SP-chrom-label.txt' <-- ['$SP-chrom.tbl'],
+'$SP-chrom2label.txt' <-- ['$SP-chrom.tbl'],
   {tax_db_species(Tax,_,SP)},
   './util/add-chrom-label.pl $SP $< > $@'.
 
 % TODO
-'$SP-chrom-label.owl' <-- ['$SP-chrom-label.txt'],
+'$SP-chrom2label.owl' <-- ['$SP-chrom2label.txt'],
   {tax_db_species(Tax,_,SP)},
   'owltools --create-ontology omeo/$@ --parse-tsv -l --iri-prefix 1 CHROMOSOME-$Tax  $< -o file://`pwd`/$@'.
 
