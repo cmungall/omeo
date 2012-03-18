@@ -28,9 +28,26 @@ anc_combo('Opisthokont',['Danio_rerio',
                          'Drosophila_melanogaster',
                          'Saccharomyces_cerevisiae']).
 
+anc_combo('Fungi',['Schizosaccharomyces_pombe',
+                   'Saccharomyces_cerevisiae']).
+
 anc_combo('Mammal',['Homo_sapiens',
                     'Mus_musculus',
                     'Rattus_norvegicus']).
+
+anc_combo('Mammal-hm',['Homo_sapiens',
+                       'Mus_musculus']).
+
+anc_combo('Vertebrate',['Homo_sapiens',
+                        'Mus_musculus',
+                        'Rattus_norvegicus',
+                        'Gallus_gallus',
+                        'Danio_rerio']).
+
+anc_combo('Vertebrate-hmz',['Homo_sapiens',
+                            'Mus_musculus',
+                            'Danio_rerio']).
+
 
 /*
 tax_idprop_mod(9606,mim_gene_accession,'MIM').
@@ -81,7 +98,7 @@ attr_pair(ensembl_gene_id,gene_biotype).
 attr_pair(ensembl_gene_id,chromosome_name).
 attr_pair(ensembl_gene_id,entrezgene).
 attr_pair(ensembl_gene_id,interpro).
-attr_pair(ensembl_gene_id,external_id). % snp rs#, etc. Only for some species
+attr_pair(ensembl_gene_id,external_id). % snp rs#, etc. Only for some species; not currently used in any owl
 attr_pair(ensembl_gene_id,interpro).
 attr_pair(ensembl_gene_id,family).
 attr_pair(family, family_description).
@@ -106,8 +123,13 @@ subont_tax('uniprot-pro',10090).
 subont_tax('uniprot-pro',9606).
 subont_tax('ensfm',T) :- T\=4896.
 subont_tax('family-description',T) :- T\=4896.
-%%%subont_tax('goannotations',T) :- \+ non_refg(T).  % don't include in imports
-subont_tax(T,_) :- subont_tax(T).
+subont_tax(S,_) :- subont_tax(S).
+subont_tax(S,_) :- subont_tax(S).
+subont_tax(S,T,main) :- subont_tax(S,T).
+subont_tax('goannotations',T,ann) :- \+ non_refg(T).  % don't include in imports
+subont_tax('expr',10090,ann).
+subont_tax('expr',9606,ann).
+subont_tax('expr',7955,ann).
 
 sp_attr_pair(SP,A1,A2) :-
         tax_db_species(_,_,SP),
@@ -123,13 +145,14 @@ all_mart <-- Deps,
 
 all_owl_subont <-- Deps,
        {findall(t([SP,-,Type,'.owl']),
-                (   tax_db_species(Tax,_,SP),subont_tax(Type,Tax)),
+                (   tax_db_species(Tax,_,SP),subont_tax(Type,Tax,_)),
                 Deps)}.
 
 all_owl <-- Deps,
        {findall(t([SP,'.owl']),
                 tax_db_species(_,_,SP),
                 Deps)}.
+
 all_obo <-- Deps,
        {findall(t([SP,'.obo']),
                 tax_db_species(_,_,SP),
@@ -182,6 +205,7 @@ species_dependencies(SP,Deps,Files) :-
   'owltools --create-ontology omeo/$SP.owl --add-imports-declarations $FA http://purl.obolibrary.org/obo/so.owl http://purl.obolibrary.org/obo/ro.owl -o file://`pwd`/$@'.
 %  'owltools --create-ontology omeo/$SP.owl $FA so.owl --merge-support-ontologies -o file://`pwd`/$@'.
 
+% makes merged ontologies [DEPRECATED]
 'combo/$Anc.owl' <-- [],
   {anc_combo(Anc,SpList),
    findall(F,(member(Sp,SpList),atom_concat(Sp,'.owl',F)),Fs),
@@ -230,7 +254,7 @@ species_dependencies(SP,Deps,Files) :-
 
 '$SP-equiv-mod.owl' <-- ['$SP-mod_id-ensembl_gene_id.mart'],
   {sp_prefix(SP,MOD)},
-  'owltools base.obo --parse-tsv -a EquivalentClasses --iri-prefix 1 $MOD --iri-prefix 2 ENSEMBL $< -o file://`pwd`/$@'.
+  'owltools --create-ontology omeo/$@ --parse-tsv -a EquivalentClasses --iri-prefix 1 $MOD --iri-prefix 2 ENSEMBL $< -o file://`pwd`/$@'.
 
 '$SP-entrez.owl' <-- ['$SP-ensembl_gene_id-entrezgene.mart'],
   'owltools --create-ontology omeo/$@ --parse-tsv -a EquivalentClasses --iri-prefix 1 ENSEMBL --iri-prefix 2 NCBIGene $< -o file://`pwd`/$@'.
@@ -322,8 +346,9 @@ species_dependencies(SP,Deps,Files) :-
      './add-sym.pl $< | sort -u > $@'.
 
 % orthologs from panther
-'ortho.owl' <-- 'shom.tbl',
-     'owltools --create-ontology panther ro-subset.owl --merge-support-ontologies --parse-tsv -a SubClassOf -p RO:0002158  $< -o file://`pwd`/$@'.
+%% TODO - do per species instead? Instance-level?
+%'ortho.owl' <-- 'shom.tbl',
+%     'owltools --create-ontology panther ro-subset.owl --merge-support-ontologies --parse-tsv -a SubClassOf -p RO:0002158  $< -o file://`pwd`/$@'.
 
 'g2family.txt' <-- 'refg_ortho_family.txt',
      'cut -f1,2,7 $< > $@.tmp && sort -u $@.tmp > $@'.
@@ -398,18 +423,51 @@ sp_gaf(SP,DB) :-
   'obolib-obo2owl $< -o  $@'.
 
 '$SP-goannotations.owl' <-- ['$SP.gaf'],
-  'owltools http://purl.obolibrary.org/obo/go.owl --gaf $< --gaf2owl -n go/annotations/$SP-goannotations -o file://`pwd`/$@'.
+
+
+
+
+'owltools http://purl.obolibrary.org/obo/go.owl --gaf $< --gaf2owl -n go/annotations/$SP-goannotations -o file://`pwd`/$@'.
 
 
 %'$SP-gaf-syns.tbl' <-- ['$SP.gaf'],
 %  'util/gaf2syns.pl $< > $@'.
 
+% ----------------------------------------
+% EXPRESSION
+% ----------------------------------------
 
 'zfin-wildtype-expression.txt' <-- [],
   'wget http://zfin.org/data_transfer/Downloads/wildtype-expression.txt -O $@'.
 
 'geisha.txt' <-- [],
   'wget http://geisha.arizona.edu/geisha/expression.txt -O $@'.
+
+% expression.tsv is from bgee; extract annotations for which there is at least one high quality observation. Simplify to gene-AOterm pairs
+'expression_hq.tsv' <-- 'expression.tsv',
+  'grep high $< | cut -f2,3 | sort -u > $@'.
+
+'Homo_sapiens-expr.txt' <-- 'expression_hq.tsv',
+   'grep ^ENSG $< | perl -npe "s/^ENS/ENSEMBL:ENS/"  > $@'.
+
+'Danio_rerio-expr.txt' <-- 'expression_hq.tsv',
+   'grep ^ENSDAR $< | perl -npe "s/^ENS/ENSEMBL:ENS/"  > $@'.
+
+'Mus_musculus-expr.txt' <-- 'expression_hq.tsv',
+   'grep ^ENSMUSG $< | perl -npe "s/^ENS/ENSEMBL:ENS/"  > $@'.
+
+'Xenopus_tropicalis-expr.txt' <-- 'expression_hq.tsv',
+   'grep ^ENSXETG $< | perl -npe "s/^ENS/ENSEMBL:ENS/"  > $@'.
+
+'Drosophila_melanogaster-expr.txt' <-- 'expression_hq.tsv',
+   'grep ^FB $< | perl -npe "s/^FB/FB:FB/"  > $@'.
+
+'$SP-expr-ubr.txt' <-- '$SP-expr.txt',
+   'obo-map-ids.pl --use-xref-inverse -k 2 --regex-filter UBERON composite-metazoan.obo  $< > $@'.
+
+'$SP-expr.owl' <-- '$SP-expr-ubr.txt',
+   'owltools --create-ontology omeo/$@ --parse-tsv -p RO:00022060 -a SubClassOf  $< -o file://`pwd`/$@'.
+
 
 % ----------------------------------------
 % VARIATION
@@ -449,11 +507,9 @@ sp_gaf(SP,DB) :-
 download('http://www.genome.gov/admin/gwascatalog.txt').
 download('ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/database/organism_data/OmimVarLocusIdSNP.bcp.gz').  % appears more up to date than the ensembl table
 
-
 'ext-$F' <-- [],
   {download(URL),atomic_list_concat(Toks,/,URL),reverse(Toks,[F|_])},
   'wget $URL -O ext-$F'.
-
 
 'Saccharomyces_cerevisiae-pheno.txt' <-- [],
   'wget http://downloads.yeastgenome.org/curation/literature/phenotype_data.tab -O $@'.
@@ -468,7 +524,31 @@ vp(hsapiens_snp). % 132998 / 41427246
 
 %tax_db_species(
 
+% ----------------------------------------
+% PHENOTYPE
+% ----------------------------------------
 
+'Mus_musculus-gene-phenotype.txt' <-- [],
+  'wget "http://obo.svn.sourceforge.net/viewvc/obo/phenotype-commons/annotations/MGI/gene_phenotype.txt" -O $@'.
+
+'Mus_musculus-genotype-phenotype.txt' <-- [],
+  'wget "http://obo.svn.sourceforge.net/viewvc/obo/phenotype-commons/annotations/MGI/genotype_phenotype.txt" -O $@'.
+
+'Homo_sapiens-gene-phenotype.txt' <-- [],
+  'wget "http://obo.svn.sourceforge.net/viewvc/obo/phenotype-commons/annotations/Human/gene_phenotype.txt" -O $@'.
+
+% ----------------------------------------
+% CATALOGS
+% ----------------------------------------
+
+'catalog-v001.xml' <-- [],
+  'find . -name "*.owl" | ./make-catalog-xml.pl  > $@'.
+
+% ----------------------------------------
+% SUBSETS
+% ----------------------------------------
+'../subsets/panther-$Fam-$Tax.owl' <-- '$Tax.owl',
+  'owltools --use-catalog $Tax.owl --merge-import-closure --reasoner-query -r elk -d -c http://purl.obolibrary.org/obo/omeo/subsets/panther-$Fam-$Tax.owl -l PANTHER:$Fam -o file://`pwd`/$@'.
 
 % ----------------------------------------
 % SYNC
