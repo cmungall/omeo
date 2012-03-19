@@ -1,5 +1,6 @@
 #!/usr/bin/perl
-print "ontology: _\n\n";
+my $ont = shift;
+print "ontology: $ont\n\n";
 while (<>) {
     #next if /^\!/;
     @vs = split(/\t/,$_);

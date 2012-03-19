@@ -38,6 +38,7 @@
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Danio_rerio-ensfm.owl" uri="Danio_rerio-ensfm.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Danio_rerio-entrez.owl" uri="Danio_rerio-entrez.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Danio_rerio-equiv-mod.owl" uri="Danio_rerio-equiv-mod.owl"/>
+    <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Danio_rerio-expr.owl" uri="Danio_rerio-expr.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Danio_rerio-family-description.owl" uri="Danio_rerio-family-description.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Danio_rerio-family.owl" uri="Danio_rerio-family.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Danio_rerio-gaf-syns.owl" uri="Danio_rerio-gaf-syns.owl"/>
@@ -50,6 +51,7 @@
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Danio_rerio-type.owl" uri="Danio_rerio-type.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Danio_rerio-uniprot.owl" uri="Danio_rerio-uniprot.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Danio_rerio.owl" uri="Danio_rerio.owl"/>
+    <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/devkb.owl" uri="devkb.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Drosophila_melanogaster-chrom-label.owl" uri="Drosophila_melanogaster-chrom-label.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Drosophila_melanogaster-chrom.owl" uri="Drosophila_melanogaster-chrom.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Drosophila_melanogaster-chrom2label.owl" uri="Drosophila_melanogaster-chrom2label.owl"/>
@@ -84,17 +86,19 @@
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Gallus_gallus-type.owl" uri="Gallus_gallus-type.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Gallus_gallus-uniprot.owl" uri="Gallus_gallus-uniprot.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Gallus_gallus.owl" uri="Gallus_gallus.owl"/>
-    <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/hom_rev.owl" uri="hom_rev.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Homo_sapiens-chrom.owl" uri="Homo_sapiens-chrom.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Homo_sapiens-chrom2label.owl" uri="Homo_sapiens-chrom2label.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Homo_sapiens-comment.owl" uri="Homo_sapiens-comment.owl"/>
+    <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Homo_sapiens-disorder-phenotype.owl" uri="Homo_sapiens-disorder-phenotype.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Homo_sapiens-ensfm.owl" uri="Homo_sapiens-ensfm.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Homo_sapiens-entrez.owl" uri="Homo_sapiens-entrez.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Homo_sapiens-equiv-mod.owl" uri="Homo_sapiens-equiv-mod.owl"/>
+    <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Homo_sapiens-expr.owl" uri="Homo_sapiens-expr.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Homo_sapiens-family-description.owl" uri="Homo_sapiens-family-description.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Homo_sapiens-family.owl" uri="Homo_sapiens-family.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Homo_sapiens-gaf-syns.owl" uri="Homo_sapiens-gaf-syns.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Homo_sapiens-gene-chrom.owl" uri="Homo_sapiens-gene-chrom.owl"/>
+    <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Homo_sapiens-gene-phenotype.owl" uri="Homo_sapiens-gene-phenotype.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Homo_sapiens-gene-snp.owl" uri="Homo_sapiens-gene-snp.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Homo_sapiens-goannotations.owl" uri="Homo_sapiens-goannotations.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Homo_sapiens-label.owl" uri="Homo_sapiens-label.owl"/>
@@ -112,9 +116,11 @@
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Mus_musculus-ensfm.owl" uri="Mus_musculus-ensfm.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Mus_musculus-entrez.owl" uri="Mus_musculus-entrez.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Mus_musculus-equiv-mod.owl" uri="Mus_musculus-equiv-mod.owl"/>
+    <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Mus_musculus-expr.owl" uri="Mus_musculus-expr.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Mus_musculus-family-description.owl" uri="Mus_musculus-family-description.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Mus_musculus-gaf-syns.owl" uri="Mus_musculus-gaf-syns.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Mus_musculus-gene-chrom.owl" uri="Mus_musculus-gene-chrom.owl"/>
+    <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Mus_musculus-gene-phenotype.owl" uri="Mus_musculus-gene-phenotype.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Mus_musculus-goannotations.owl" uri="Mus_musculus-goannotations.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Mus_musculus-label.owl" uri="Mus_musculus-label.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Mus_musculus-panther.owl" uri="Mus_musculus-panther.owl"/>
@@ -123,12 +129,10 @@
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Mus_musculus-uniprot-pro.owl" uri="Mus_musculus-uniprot-pro.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Mus_musculus-uniprot.owl" uri="Mus_musculus-uniprot.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Mus_musculus.owl" uri="Mus_musculus.owl"/>
-    <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/ortho.owl" uri="ortho.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/out.owl" uri="out.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Petromyzon_marinus-chrom.owl" uri="Petromyzon_marinus-chrom.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Petromyzon_marinus-comment.owl" uri="Petromyzon_marinus-comment.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Petromyzon_marinus-ensfm.owl" uri="Petromyzon_marinus-ensfm.owl"/>
-    <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Petromyzon_marinus-equiv-mod.owl" uri="Petromyzon_marinus-equiv-mod.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Petromyzon_marinus-gene-chrom.owl" uri="Petromyzon_marinus-gene-chrom.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Petromyzon_marinus-label.owl" uri="Petromyzon_marinus-label.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Petromyzon_marinus-panther.owl" uri="Petromyzon_marinus-panther.owl"/>
@@ -187,7 +191,11 @@
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/Schizosaccharomyces_pombe.owl" uri="Schizosaccharomyces_pombe.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/so.owl" uri="so.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/test.owl" uri="test.owl"/>
+    <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/vertebrate-hmz-px.owl" uri="vertebrate-hmz-px.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/vertebrate.owl" uri="vertebrate.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/z.obo.owl" uri="z.obo.owl"/>
     <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/omeo/z.owl" uri="z.owl"/>
+    <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/so.owl" uri="../external/so.owl"/>
+    <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/iao/ontology-metadata.owl" uri="../external/ontology-metadata.owl"/>
+    <uri id="User Entered Import Resolution" name="http://purl.obolibrary.org/obo/ro.owl" uri="../external/ro.owl"/>
 </catalog>

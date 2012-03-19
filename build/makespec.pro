@@ -418,7 +418,7 @@ sp_gaf(SP,DB) :-
   'wget http://geneontology.org/gene-associations/gene_association.$DB.gz -O $@.gz && gzip -d $@.gz'.
 
 '$SP-gaf-syns.obo' <-- ['$SP.gaf'],
-  'util/gaf2obosyns.pl $< > $@'.
+  'util/gaf2obosyns.pl omeo/$SP-gaf-syns $< > $@'.
 '$SP-gaf-syns.owl' <-- ['$SP-gaf-syns.obo'],
   'obolib-obo2owl $< -o  $@'.
 
@@ -529,13 +529,19 @@ vp(hsapiens_snp). % 132998 / 41427246
 % ----------------------------------------
 
 'Mus_musculus-gene-phenotype.txt' <-- [],
-  'wget "http://obo.svn.sourceforge.net/viewvc/obo/phenotype-commons/annotations/MGI/gene_phenotype.txt" -O $@'.
+  'wget "http://obo.svn.sourceforge.net/viewvc/obo/phenotype-commons/annotations/MGI/gene_phenotype.txt" -O $@.tmp && ./util/prefix-with.pl MGI: $@tmp > $@'.
 
 'Mus_musculus-genotype-phenotype.txt' <-- [],
   'wget "http://obo.svn.sourceforge.net/viewvc/obo/phenotype-commons/annotations/MGI/genotype_phenotype.txt" -O $@'.
 
 'Homo_sapiens-gene-phenotype.txt' <-- [],
   'wget "http://obo.svn.sourceforge.net/viewvc/obo/phenotype-commons/annotations/Human/gene_phenotype.txt" -O $@'.
+
+'Homo_sapiens-disorder-phenotype.txt' <-- [],
+  'wget "http://obo.svn.sourceforge.net/viewvc/obo/phenotype-commons/annotations/Human/gene_phenotype.txt" -O $@'.
+
+'$SP-$E-phenotype.owl' <-- '$SP-$E-phenotype.txt',
+   'owltools --create-ontology omeo/$@ --parse-tsv -p RO:0002214 -a SubClassOf  $< -o file://`pwd`/$@'.
 
 % ----------------------------------------
 % CATALOGS

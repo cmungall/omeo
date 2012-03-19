@@ -1,0 +1,23 @@
+
+Software requirements
+---------------------
+
+ * http://github/com/cmungall/plmake
+
+   A 'make'-like tool that can handle more advanced configurations
+
+ * http://github/com/cmungall/obo-scripts
+
+ * http://code.google.com/p/owltools
+
+   This is used to generate OWL files from tabular data
+
+Build instructions
+------------------
+
+To build all OWL files, type:
+
+  plmake all_owl
+
+
+
